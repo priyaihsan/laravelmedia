@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\FollowController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -34,19 +36,19 @@ Route::middleware('auth')->group(function () {
     Route::get('/home', [PostController::class, 'home'])->name('home');
     Route::get('/post', [PostController::class, 'index'])->name('post.index');
     Route::post('/post', [PostController::class, 'store'])->name('post.store');
-    Route::get('/post/create', [PostController::class, 'create'])->name('post.create');
-    Route::get('/post/{post}/edit', [PostController::class, 'edit'])->name('post.edit');
+    Route::get('/post-create', [PostController::class, 'create'])->name('post.create');
+    Route::get('/post-edit/{post}', [PostController::class, 'edit'])->name('post.edit');
     Route::patch('/post/{post}', [PostController::class, 'update'])->name('post.update');
     Route::delete('/post/{post}', [PostController::class, 'destroy'])->name('post.destroy');
 
     // untuk menghitung post like dan unlike , save dan unsave
-    Route::post('/post/{post}/like', [PostController::class, 'like'])->name('post.like');
-    Route::delete('/post/{post}/unlike', [PostController::class, 'unlike'])->name('post.unlike');
-    Route::post('/post/{post}/save', [PostController::class, 'save'])->name('post.save');
-    Route::delete('/post/{post}/unsave', [PostController::class, 'unsave'])->name('post.unsave');
+    Route::post('/post-like/{post}', [PostController::class, 'like'])->name('post.like');
+    Route::delete('/post-unlike/{post}', [PostController::class, 'unlike'])->name('post.unlike');
+    Route::post('/post-save/{post}', [PostController::class, 'save'])->name('post.save');
+    Route::delete('/post-unsave/{post}', [PostController::class, 'unsave'])->name('post.unsave');
 
-    Route::post('/user/{user}/follow', [UserController::class, 'follow'])->name('user.follow');
-    Route::delete('/user/{user}/unfollow', [UserController::class, 'unfollow'])->name('user.unfollow');
+    Route::post('/user-follow/{user}', [FollowController::class, 'follow'])->name('user.follow');
+    Route::delete('/user-unfollow/{user}', [FollowController::class, 'unfollow'])->name('user.unfollow');
 });
 
 require __DIR__ . '/auth.php';
