@@ -8,4 +8,21 @@ use Illuminate\Database\Eloquent\Model;
 class Saved extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'post_id',
+    ];
+
+    // relasi 1 to m tabel post
+    public function post()
+    {
+        return $this->belongsTo(Post::class);
+    }
+
+    // relasi 1 to m tabel user
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

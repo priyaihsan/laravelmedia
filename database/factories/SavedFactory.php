@@ -18,9 +18,12 @@ class SavedFactory extends Factory
      */
     public function definition(): array
     {
+        $post = Post::inRandomOrder()->first()->id;
+        $postid = User::whereNotIn('id', [$post])->pluck('id')->random();
+
         return [
             'user_id' => User::inRandomOrder()->first()->id,
-            'post_id' => Post::inRandomOrder()->first()->id,
+            'post_id' => $postid,
         ];
     }
 }

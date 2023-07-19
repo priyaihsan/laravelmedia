@@ -50,7 +50,25 @@ class User extends Authenticatable
     //relasi many-to-many dengan model Role
     public function roles()
     {
-        return $this->belongsToMany(Role::class,'role_users', 'user_id', 'role_id');
+        return $this->belongsToMany(Role::class, 'role_users', 'user_id', 'role_id');
+    }
+
+    // relasi 1 to M ke tabel like
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
+    }
+
+    // relasi 1 to M  ke tabel post
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+
+    // relasi 1 to m ke tabel saved
+    public function saveds()
+    {
+        return $this->hasMany(Saved::class);
     }
 
     // relasi 1 to M ke tabel follow
@@ -74,5 +92,11 @@ class User extends Authenticatable
     public function getFollowerCountAttribute()
     {
         return $this->follower->count();
+    }
+
+    // get post count attribute
+    public function getPostsCountAttribute()
+    {
+        return $this->posts->count();
     }
 }
