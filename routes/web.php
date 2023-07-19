@@ -34,7 +34,6 @@ Route::middleware('auth')->group(function () {
 
     // post
     Route::get('/home', [PostController::class, 'home'])->name('home');
-    Route::get('/post', [PostController::class, 'index'])->name('post.index');
     Route::post('/post', [PostController::class, 'store'])->name('post.store');
     Route::get('/post-create', [PostController::class, 'create'])->name('post.create');
     Route::get('/post-edit/{post}', [PostController::class, 'edit'])->name('post.edit');
