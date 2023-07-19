@@ -16,7 +16,7 @@ class ProfileController extends Controller
     {
         $user = User::where('id',auth()->user()->id)->get();
         // dd($user->toArray());
-        return view('profile.index',compact('user',));
+        return view('profile.index',compact('user'));
     }
 
     public function tersimpan(): View

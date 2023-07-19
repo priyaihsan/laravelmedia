@@ -21,7 +21,7 @@ class UserFactory extends Factory
         // menambahkan API unsplash untuk menggenerate gambar foto profile
         // composer require guzzlehttp/guzzle
         $client = new Client();
-        $key = 'X35VAUCfRsxbBYyE17Ye1B0-l_cmQ9xRxZcKwd6U6AM';
+        $key = '1GEdHPZQmoKAK2rdGRqru1P7CrT8SuHx8b_jng1LfD8';
 
         $response = $client->request('GET', 'https://api.unsplash.com/photos/random', [
             'query' => [

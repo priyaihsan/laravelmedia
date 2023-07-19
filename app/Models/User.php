@@ -47,6 +47,12 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    //relasi many-to-many dengan model Role
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class,'role_users', 'user_id', 'role_id');
+    }
+
     // relasi 1 to M ke tabel follow
     public function following()
     {
