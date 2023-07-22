@@ -65,7 +65,7 @@
                         <x-sub-link :href="route('profile.tersimpan')" :active="request()->routeIs('profile.tersimpan')">
                             {{ __('Tersimpan') }}
                         </x-sub-link>
-                        <x-sub-link :href="route('profile.edit')">
+                        <x-sub-link :href="route('post.create')">
                             {{ __('Create Post') }}
                         </x-sub-link>
                         <x-sub-link :href="route('profile.edit')">
@@ -73,11 +73,11 @@
                         </x-sub-link>
                     </div>
                     <div class="flex flex-wrap h-[500px] w-full overflow-x-auto">
-                        @foreach ($user->posts as $post )
+                        @foreach ($user->posts as $post)
                             {{-- start card social media --}}
                             <div
-                                class="flex flex-col justify-between w-96 h-auto mx-2 my-2 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-                                <div class="flex items-center justify-between">
+                                class="flex flex-col justify-between w-96 h-max mx-2 my-2 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+                                <div>
                                     <button data-popover-target="popover-click-{{ $post->id }}"
                                         data-popover-trigger="click" type="button"
                                         class="my-2 text-2xl px-6 font-bold text-left tracking-tight text-gray-900 dark:text-white hover:underline hover:decoration-solid">
@@ -108,10 +108,13 @@
                                     <div data-popper-arrow></div>
                                 </div>
                                 <div>
-                                    <p class="font-normal px-6 text-gray-700 dark:text-gray-400">{{ $post->content }}
-                                    </p>
-                                    <p class="my-2 text-xs font-normal px-6 text-gray-700 dark:text-slate-500">
+                                    <div class="h-26 overflow-hidden">
+                                        <div class="font-normal line-clamp-3 px-6 text-gray-700 dark:text-gray-400">
+                                            {{ $post->content }}</div>
+                                      </div>
+                                      <p class="my-2 text-xs font-normal px-6 text-gray-700 dark:text-slate-500">
                                         {{ $post->category->name }}, {{ $post->type->name }}</p>
+
                                 </div>
                                 <div class="flex justify-end px-6 mb-1">
                                     <div class="flex justify-center items-center">

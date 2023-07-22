@@ -19,15 +19,15 @@
                         </div>
                         <div class="flex flex-wrap mt-3 lg:justify-between md:justify-start text-base">
                             <div class="flex items-center me-2">
-                                <p class="me-2 font-bold">{{ $user->posts_count }}</p>
+                                <p class="me-2 font-semibold text-gray-900 dark:text-white">{{ $user->posts_count }}</p>
                                 <p class=" font-light dark:text-slate-200">postingan</p>
                             </div>
                             <div class="flex items-center me-2">
-                                <p class="me-2 font-bold">{{ $user->follower_count }}</p>
+                                <p class="me-2 font-semibold text-gray-900 dark:text-white">{{ $user->follower_count }}</p>
                                 <p class=" font-light dark:text-slate-200">follower</p>
                             </div>
                             <div class="flex items-center me-2">
-                                <p class="me-2 font-bold">{{ $user->following_count }}</p>
+                                <p class="me-2 font-semibold text-gray-900 dark:text-white">{{ $user->following_count }}</p>
                                 <p class="font-light dark:text-slate-200">following</p>
                             </div>
                         </div>
@@ -65,7 +65,7 @@
                         <x-sub-link :href="route('profile.tersimpan')" :active="request()->routeIs('profile.tersimpan')">
                             {{ __('Tersimpan') }}
                         </x-sub-link>
-                        <x-sub-link :href="route('profile.edit')">
+                        <x-sub-link :href="route('post.create')">
                             {{ __('Create Post') }}
                         </x-sub-link>
                         <x-sub-link :href="route('profile.edit')">
@@ -76,40 +76,41 @@
                         @foreach ($user->saveds as $saved)
                             {{-- start card social media --}}
                             <div
-                                class="flex flex-col justify-between w-96 h-auto mx-2 my-2 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-                                <div class="flex items-center justify-between">
+                                class="flex flex-col w-96 h-max mx-2 my-2 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+                                <div>
                                     <button data-popover-target="popover-click-{{ $saved->post->id }}"
                                         data-popover-trigger="click" type="button"
                                         class="my-2 text-2xl px-6 font-bold text-left tracking-tight text-gray-900 dark:text-white hover:underline hover:decoration-solid">
                                         {{ $saved->post->title }}
                                     </button>
-
                                 </div>
                                 <div data-popover id="popover-click-{{ $saved->post->id }}" role="tooltip"
                                     class="absolute z-10 invisible inline-block w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800">
                                     <div
                                         class="px-3 py-2 bg-gray-100 border-b border-gray-200 rounded-t-lg dark:border-gray-600 dark:bg-gray-700">
-                                        <h3 class="font-semibold text-gray-900 dark:text-white">{{ $saved->post->title }}
-                                        </h3>
+                                        <div class="flex items-center">
+                                            <img class="bg-cover rounded-full w-10 h-10"
+                                                src="{{ $saved->post->user->profile_picture }}" alt="">
+                                            <p
+                                                class="ms-2 text-base font-semibold leading-none text-gray-900 dark:text-white">
+                                                {{ $saved->post->user->name }}</p>
+                                        </div>
+                                        <div class="flex items-center justify-between mt-2">
+                                            <p><span class="font-semibold text-gray-900 dark:text-white">{{ $saved->post->user->follower_count }}</span> follower</p>
+                                            <p><span class="font-semibold text-gray-900 dark:text-white">{{ $saved->post->user->following_count }}</span> following</p>
+                                        </div>
                                     </div>
                                     <div class="flex items-center justify-between">
                                         <a href="{{ route('post.edit', $saved->post) }}"
-                                            class="p-3 dark:text-slate-500 hover:bg-gray-100 dark:hover:text-white dark:hover:bg-gray-800 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-800 transition duration-150 ease-in-out">Edit
-                                            Post</a>
-                                        <form action="{{ route('post.destroy', $saved->post) }}" method="Post">
-                                            @csrf
-                                            @method('delete')
-                                            <button type="submit"
-                                                class="p-3 dark:text-red-50 hover:bg-gray-100 dark:hover:text-red-500 dark:hover:bg-gray-800 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-800 transition duration-150 ease-in-out">
-                                                Delete Post
-                                            </button>
-                                        </form>
+                                            class="p-3 dark:text-slate-500 hover:bg-gray-100 dark:hover:text-white dark:hover:bg-gray-800 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-800 transition duration-150 ease-in-out">Lihat Profile</a>
                                     </div>
                                     <div data-popper-arrow></div>
                                 </div>
                                 <div>
-                                    <p class="font-normal px-6 text-gray-700 dark:text-gray-400">{{ $saved->post->content }}
-                                    </p>
+                                    <div class="h-26 overflow-hidden">
+                                        <div class="font-normal line-clamp-3 px-6 text-gray-700 dark:text-gray-400">
+                                            {{ $saved->post->content }}</div>
+                                    </div>
                                     <p class="my-2 text-xs font-normal px-6 text-gray-700 dark:text-slate-500">
                                         {{ $saved->post->category->name }}, {{ $saved->post->type->name }}</p>
                                 </div>
@@ -145,8 +146,12 @@
                                         @endif
                                         {{-- end form likes --}}
                                         {{-- start form saveds --}}
-                                        <x-card-button.saved-button>
-                                        </x-card-button.saved-button>
+                                        <form action="{{ route('post.unsave', $saved->post) }}" method="POST">
+                                            @csrf
+                                            @method('delete')
+                                            <x-card-button.saved-button>
+                                            </x-card-button.saved-button>
+                                        </form>
                                         {{-- end form saveds --}}
                                     </div>
                                 </div>

@@ -34,6 +34,8 @@ Route::middleware('auth')->group(function () {
 
     // post
     Route::get('/home', [PostController::class, 'home'])->name('home');
+    Route::get('/message',[PostController::class, 'message'])->name('post.message');
+    Route::get('/notification',[PostController::class, 'notification'])->name('post.notification');
     Route::post('/post', [PostController::class, 'store'])->name('post.store');
     Route::get('/post-create', [PostController::class, 'create'])->name('post.create');
     Route::get('/post-edit/{post}', [PostController::class, 'edit'])->name('post.edit');
