@@ -19,15 +19,27 @@
                         </div>
                         <div class="flex flex-wrap mt-3 lg:justify-between md:justify-start text-base">
                             <div class="flex items-center me-2">
-                                <p class="me-2 font-bold">{{ $user->posts_count }}</p>
+                                @if ($user->posts_count == 0)
+                                    <p class="me-2 font-bold">0</p>
+                                @else
+                                    <p class="me-2 font-bold">{{ $user->posts_count }}</p>
+                                @endif
                                 <p class=" font-light dark:text-slate-200">postingan</p>
                             </div>
                             <div class="flex items-center me-2">
-                                <p class="me-2 font-bold">{{ $user->follower_count }}</p>
+                                @if ($user->followers_count == 0)
+                                    <p class="me-2 font-bold">0</p>
+                                @else
+                                    <p class="me-2 font-bold">{{ $user->followers_count }}</p>
+                                @endif
                                 <p class=" font-light dark:text-slate-200">follower</p>
                             </div>
                             <div class="flex items-center me-2">
-                                <p class="me-2 font-bold">{{ $user->following_count }}</p>
+                                @if ($user->followings_count == 0)
+                                    <p class="me-2 font-bold">0</p>
+                                @else
+                                    <p class="me-2 font-bold">{{ $user->followings_count }}</p>
+                                @endif
                                 <p class="font-light dark:text-slate-200">following</p>
                             </div>
                         </div>
@@ -111,8 +123,8 @@
                                     <div class="h-26 overflow-hidden">
                                         <div class="font-normal line-clamp-3 px-6 text-gray-700 dark:text-gray-400">
                                             {{ $post->content }}</div>
-                                      </div>
-                                      <p class="my-2 text-xs font-normal px-6 text-gray-700 dark:text-slate-500">
+                                    </div>
+                                    <p class="my-2 text-xs font-normal px-6 text-gray-700 dark:text-slate-500">
                                         {{ $post->category->name }}, {{ $post->type->name }}</p>
 
                                 </div>
