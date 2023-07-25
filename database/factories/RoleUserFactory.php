@@ -2,12 +2,11 @@
 
 namespace Database\Factories;
 
-use App\Models\Role;
-use App\Models\User;
+use App\Models\RoleUser;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\RoleUser>
+ * @extends Factory<RoleUser>
  */
 class RoleUserFactory extends Factory
 {

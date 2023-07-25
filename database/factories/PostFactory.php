@@ -3,12 +3,13 @@
 namespace Database\Factories;
 
 use App\Models\Category;
+use App\Models\Post;
 use App\Models\Type;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Post>
+ * @extends Factory<Post>
  */
 class PostFactory extends Factory
 {
@@ -20,8 +21,8 @@ class PostFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => fake()->sentence(mt_rand(1,4)),
-            'content' => fake()->paragraph(mt_rand(3,4)),
+            'title' => fake()->sentence(mt_rand(1, 4)),
+            'content' => fake()->paragraph(mt_rand(3, 4)),
             'user_id' => User::inRandomOrder()->first()->id,
             'type_id' => Type::inRandomOrder()->first()->id,
             'category_id' => Category::inRandomOrder()->first()->id,

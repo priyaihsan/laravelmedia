@@ -41,24 +41,28 @@ class Post extends Model
     }
 
     // relasi 1 to m tabel user
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
 
-    // get like count attribute
     public function getLikesCountAttribute()
     {
         return $this->likes->count();
     }
 
-    // get is saved by user
+    // get like count attribute
+
     public function getIsSavedAttribute()
     {
         return $this->saveds->contains('user_id', auth()->user()->id);
     }
 
+    // get is saved by user
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     // get is likes by user
+
     public function getIsLikesAttribute()
     {
         return $this->likes->contains('user_id', auth()->user()->id);

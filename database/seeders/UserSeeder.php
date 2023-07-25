@@ -3,10 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use GuzzleHttp\Client;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
-use GuzzleHttp\Client;
 
 class UserSeeder extends Seeder
 {
@@ -39,7 +38,7 @@ class UserSeeder extends Seeder
                 'remember_token' => Str::random(10),
                 'profile_picture' => $profilePictureUrl,
                 // 'profile_picture'=> 'test link',
-                'bio' => fake()->paragraph(mt_rand(2,4)),
+                'bio' => fake()->paragraph(mt_rand(2, 4)),
             ]
         );
         User::create(
@@ -51,7 +50,7 @@ class UserSeeder extends Seeder
                 'remember_token' => Str::random(10),
                 'profile_picture' => $profilePictureUrl,
                 // 'profile_picture'=> 'test link',
-                'bio' => fake()->paragraph(mt_rand(2,4)),
+                'bio' => fake()->paragraph(mt_rand(2, 4)),
             ]
         );
         User::factory(10)->create();

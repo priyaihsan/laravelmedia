@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Follow;
 use App\Models\User;
-use Illuminate\Http\Request;
 
 class FollowController extends Controller
 {
@@ -21,11 +20,11 @@ class FollowController extends Controller
 
     public function unfollow(User $user)
     {
-        $follow = Follow::where('follower_id',auth()->user()->id)
-                        ->where('following_id',$user->id)
-                        ->first();
+        $follow = Follow::where('follower_id', auth()->user()->id)
+            ->where('following_id', $user->id)
+            ->first();
 
-        if($follow){
+        if ($follow) {
             $follow->delete();
         }
         return redirect()->back();

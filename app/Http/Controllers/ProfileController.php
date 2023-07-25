@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
-use App\Models\Post;
 use App\Models\Saved;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -11,8 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
-
-use function Pest\Laravel\post;
 
 class ProfileController extends Controller
 {

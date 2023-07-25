@@ -16,13 +16,6 @@ class PostController extends Controller
         return view('post.home');
     }
 
-    public function create()
-    {
-        $categories = Category::all();
-        $types = Type::all();
-        return view('post.create',compact('categories','types'));
-    }
-
     public function store(Request $request, Post $post)
     {
         $request->validate([
@@ -42,6 +35,14 @@ class PostController extends Controller
 
         return redirect()->route('profile.index');
     }
+
+    public function create()
+    {
+        $categories = Category::all();
+        $types = Type::all();
+        return view('post.create', compact('categories', 'types'));
+    }
+
     public function edit()
     {
 
