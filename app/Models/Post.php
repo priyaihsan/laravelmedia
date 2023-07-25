@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Post extends Model
 {
@@ -17,25 +19,25 @@ class Post extends Model
         'type_id',
     ];
 
-    public function type()
+    public function type(): BelongsTo
     {
         return $this->belongsTo(Type::class);
     }
 
     // relasi 1 to m tabel categories
-    public function category()
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
 
     // relasi 1 to m tabel likes
-    public function likes()
+    public function likes(): HasMany
     {
         return $this->hasMany(Like::class);
     }
 
     // relasi  1 to m tabel saveds
-    public function saveds()
+    public function saveds(): HasMany
     {
         return $this->hasMany(Saved::class);
     }
@@ -56,7 +58,7 @@ class Post extends Model
 
     // get is saved by user
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
