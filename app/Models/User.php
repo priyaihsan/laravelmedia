@@ -4,9 +4,12 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use phpDocumentor\Reflection\Types\Integer;
 
 class User extends Authenticatable
 {
@@ -48,58 +51,38 @@ class User extends Authenticatable
     ];
 
     //relasi many-to-many dengan model Role
-    public function roles()
+    public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class, 'role_users', 'user_id', 'role_id');
     }
 
     // relasi 1 to M ke tabel like
-    public function likes()
+    public function likes(): HasMany
     {
         return $this->hasMany(Like::class);
     }
 
     // relasi 1 to M  ke tabel post
-    public function posts()
+    public function posts(): HasMany
     {
         return $this->hasMany(Post::class);
     }
 
     // relasi 1 to m ke tabel saved
-    public function saveds()
+    public function saveds(): HasMany
     {
         return $this->hasMany(Saved::class);
     }
 
     // relasi 1 to M ke tabel follow
-    public function following()
+    public function following(): HasMany
     {
         return $this->hasMany(Follow::class, 'follower_id');
     }
 
-    public function followers()
+    public function followers(): HasMany
     {
         return $this->hasMany(Follow::class, 'following_id');
     }
 
-    // get following count attribute
-    public function getFollowingCountAttribute()
-    {
-        // return $this->following()->count()->get();
-        return optional($this->following)->count() ?? 0;
-    }
-
-    // get follower count attribute
-    public function getFollowerCountAttribute()
-    {
-        // return $this->followers()->count()->get();
-        return optional($this->followers)->count() ?? 0;
-    }
-
-    // get post count attribute
-    public function getPostsCountAttribute()
-    {
-        // return $this->posts()->count()->get();
-        return optional($this->posts)->count() ?? 0;
-    }
 }

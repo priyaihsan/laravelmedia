@@ -8,35 +8,35 @@
                     <div class="w-full dark:bg-gray-600 lg:w-1/3 p-5 rounded-lg">
                         <div class="flex items-center">
                             <img class="w-16 h-16 lg:w-[150px] lg:h-[150px] object-cover rounded-full mr-2 border-[7px] border-indigo-600"
-                                src="{{ auth()->user()->profile_picture }}" alt="">
+                                src="{{ $user->profile_picture }}" alt="">
                             <div class="flex lg:mt-5 mt-1 mx-4">
                                 <div>
-                                    <p class="text-lg font-bold">{{ auth()->user()->name }}</p>
-                                    <p class="text-sm font-light dark:text-slate-400">{{ auth()->user()->email }}</p>
+                                    <p class="text-lg font-bold">{{ $user->name }}</p>
+                                    <p class="text-sm font-light dark:text-slate-400">{{ $user->email }}</p>
                                 </div>
                             </div>
                         </div>
                         <div class="flex flex-wrap mt-3 lg:justify-between md:justify-start text-base">
                             <div class="flex items-center me-2">
-                                <p class="me-2 font-semibold text-gray-900 dark:text-white">{{ auth()->user()->posts_count }}</p>
+                                <p class="me-2 font-semibold text-gray-900 dark:text-white">{{ $user->posts_count }}</p>
                                 <p class=" font-light dark:text-slate-200">postingan</p>
                             </div>
                             <div class="flex items-center me-2">
-                                <p class="me-2 font-semibold text-gray-900 dark:text-white">{{ auth()->user()->follower_count }}</p>
+                                <p class="me-2 font-semibold text-gray-900 dark:text-white">{{ $user->followers_count }}</p>
                                 <p class=" font-light dark:text-slate-200">follower</p>
                             </div>
                             <div class="flex items-center me-2">
-                                <p class="me-2 font-semibold text-gray-900 dark:text-white">{{ auth()->user()->following_count }}</p>
+                                <p class="me-2 font-semibold text-gray-900 dark:text-white">{{ $user->followings_count }}</p>
                                 <p class="font-light dark:text-slate-200">following</p>
                             </div>
                         </div>
                         <p class="text-lg font-medium mt-5">Biodata</p>
                         <div class="mt-2">
-                            {{ auth()->user()->bio }}
+                            {{ $user->bio }}
                         </div>
                         <p class="text-lg font-medium mt-5">Role</p>
                         <div class="flex flex-wrap">
-                            @foreach (auth()->user()->roles as $role)
+                            @foreach ($user->roles as $role)
                                 <p
                                     class="flex px-4 py-4 h-10 w-auto my-1 mx-1 items-center text-sm text-white bg-dark dark:bg-slate-700 dark:text-slate-100 rounded-full">
                                     {{ $role->name }}</p>
