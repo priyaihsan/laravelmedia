@@ -77,7 +77,7 @@ class User extends Authenticatable
         return $this->hasMany(Follow::class, 'follower_id');
     }
 
-    public function follower()
+    public function followers()
     {
         return $this->hasMany(Follow::class, 'following_id');
     }
@@ -85,18 +85,21 @@ class User extends Authenticatable
     // get following count attribute
     public function getFollowingCountAttribute()
     {
-        return $this->following->count();
+        // return $this->following()->count()->get();
+        return optional($this->following)->count() ?? 0;
     }
 
     // get follower count attribute
     public function getFollowerCountAttribute()
     {
-        return $this->follower->count();
+        // return $this->followers()->count()->get();
+        return optional($this->followers)->count() ?? 0;
     }
 
     // get post count attribute
     public function getPostsCountAttribute()
     {
-        return $this->posts->count();
+        // return $this->posts()->count()->get();
+        return optional($this->posts)->count() ?? 0;
     }
 }
