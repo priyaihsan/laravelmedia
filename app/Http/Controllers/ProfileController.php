@@ -23,7 +23,7 @@ class ProfileController extends Controller
         //     ->get();
         $user = User::where('id', auth()->user()->id)
             ->with('posts', 'posts.category', 'posts.type', 'posts.likes', 'posts.user', 'posts.saveds')
-            ->withCount('followers', 'following', 'posts')
+            ->withCount('followers', 'followings', 'posts')
             ->get();
         // dd($user->toArray());
         return view('profile.index', compact('user'));
@@ -32,35 +32,35 @@ class ProfileController extends Controller
     public function tersimpan(): View
     {
 
-        $user = User::with(['saveds' => function ($query) {
-            // Menggunakan with untuk mengambil data relasi 'category', dan 'type'
-            $query->with('user', 'post', 'post.type', 'post.likes', 'post.category');
-            $query->with(['post.user' => function ($query) {
-                // Menggunakan with untuk mengambil data relasi 'category', dan 'type'
-                $query->withCount('followers', 'following');
-            }]);
-        }])
-            ->withCount('followers', 'following', 'posts')
-            ->where('id', auth()->user()->id)
-            ->get();
-
-        // $user = User::where('id', auth()->user()->id)
+        // $user = User::with(['saveds' => function ($query) {
+        //     // Menggunakan with untuk mengambil data relasi 'category', dan 'type'
+        //     $query->with('user', 'post', 'post.type', 'post.likes', 'post.category');
+        //     $query->with(['post.user' => function ($query) {
+        //         // Menggunakan with untuk mengambil data relasi 'category', dan 'type'
+        //         $query->withCount('followers', 'following');
+        //     }]);
+        // }])
         //     ->withCount('followers', 'following', 'posts')
+        //     ->where('id', auth()->user()->id)
         //     ->get();
+
+        $user = User::where('id', auth()->user()->id)
+            ->withCount('followers', 'followings', 'posts')
+            ->get();
 
         // $user = auth()->user()->loadCount('followers', 'following', 'posts');
 
-        // $saveds = Saved::where('user_id', auth()->user()->id)
-        //     ->with('user', 'post', 'post.type', 'post.likes', 'post.category')
-        //     ->with(['post.user' => function ($query) {
-        //         // Menggunakan with untuk mengambil data relasi 'category', dan 'type'
-        //         $query->withCount('followers', 'following');
-        //     }])
-        //     ->get();
+        $saveds = Saved::where('user_id', auth()->user()->id)
+            ->with('user', 'post', 'post.type', 'post.likes', 'post.category')
+            ->with(['post.user' => function ($query) {
+                // Menggunakan with untuk mengambil data relasi 'category', dan 'type'
+                $query->withCount('followers', 'followings');
+            }])
+            ->get();
 
         // dd($user->toArray());
         // dd($saveds->toArray());
-        return view('profile.tersimpan', compact( 'user'));
+        return view('profile.tersimpan', compact('user', 'saveds'));
     }
 
     /**

@@ -42,6 +42,13 @@ class Post extends Model
         return $this->hasMany(Saved::class);
     }
 
+    // get is saved by user
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
     // relasi 1 to m tabel user
 
     public function getLikesCountAttribute()
@@ -54,13 +61,6 @@ class Post extends Model
     public function getIsSavedAttribute()
     {
         return $this->saveds->contains('user_id', auth()->user()->id);
-    }
-
-    // get is saved by user
-
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
     }
 
     // get is likes by user

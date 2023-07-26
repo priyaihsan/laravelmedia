@@ -1,7 +1,20 @@
 <x-app-layout>
     <x-slot name="header">
     </x-slot>
-
+    <div class="px-12">
+        @if (session('success'))
+        <p x-data="{ show: true }" x-show="show" x-transition
+            x-init="setTimeout(() => show = false, 5000)"
+            class="pb-3 text-sm text-green-600 dark:text-green-400">{{ session('success') }}
+        </p>
+        @endif
+        @if (session('danger'))
+        <p x-data="{ show: true }" x-show="show" x-transition
+            x-init="setTimeout(() => show = false, 5000)"
+            class="pb-3 text-sm text-red-600 dark:text-red-400">{{ session('danger') }}
+        </p>
+        @endif
+    </div>
     <div class="static py-3 ">
         <div class="absolute w-full overflow-hidden shadow-sm sm:rounded-lg">
             <div class="flex flex-wrap lg:flex-nowrap p-6 text-gray-900 dark:text-gray-100">
@@ -19,27 +32,15 @@
                         </div>
                         <div class="flex flex-wrap mt-3 lg:justify-between md:justify-start text-base">
                             <div class="flex items-center me-2">
-                                @if ($user->posts_count == 0)
-                                    <p class="me-2 font-bold">0</p>
-                                @else
-                                    <p class="me-2 font-bold">{{ $user->posts_count }}</p>
-                                @endif
+                                <p class="me-2 font-bold">{{ $user->posts_count }}</p>
                                 <p class=" font-light dark:text-slate-200">postingan</p>
                             </div>
                             <div class="flex items-center me-2">
-                                @if ($user->followers_count == 0)
-                                    <p class="me-2 font-bold">0</p>
-                                @else
-                                    <p class="me-2 font-bold">{{ $user->followers_count }}</p>
-                                @endif
+                                <p class="me-2 font-bold">{{ $user->followers_count }}</p>
                                 <p class=" font-light dark:text-slate-200">follower</p>
                             </div>
                             <div class="flex items-center me-2">
-                                @if ($user->followings_count == 0)
-                                    <p class="me-2 font-bold">0</p>
-                                @else
-                                    <p class="me-2 font-bold">{{ $user->followings_count }}</p>
-                                @endif
+                                <p class="me-2 font-bold">{{ $user->followings_count }}</p>
                                 <p class="font-light dark:text-slate-200">following</p>
                             </div>
                         </div>
@@ -85,7 +86,7 @@
                         </x-sub-link>
                     </div>
                     <div class="flex flex-wrap h-[500px] w-full overflow-x-auto">
-                        @foreach ($user->saveds as $saved)
+                        @foreach($saveds as $saved)
                             {{-- start card social media --}}
                             <div
                                 class="flex flex-col w-96 h-max mx-2 my-2 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">

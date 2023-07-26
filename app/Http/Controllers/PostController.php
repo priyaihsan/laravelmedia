@@ -33,7 +33,7 @@ class PostController extends Controller
             'category_id' => $request->category_id,
         ]);
 
-        return redirect()->route('profile.index');
+        return redirect()->route('profile.index')->with('success', 'Post created successfully!');;
     }
 
     public function create()
@@ -68,7 +68,7 @@ class PostController extends Controller
             'category_id' => $request->category_id,
         ]);
 
-        return redirect()->route('profile.index');
+        return redirect()->route('profile.index')->with('success', 'Post updated successfully!');;
     }
 
     public function destroy(Post $post)
@@ -76,7 +76,7 @@ class PostController extends Controller
         if (auth()->user()->id == $post->user_id) {
             $post->delete();
             // tinggal kasih event berhasil
-            return redirect()->route('profile.index');
+            return redirect()->route('profile.index')->with('success', 'Post deleted successfully!');
         }
     }
 
@@ -98,12 +98,15 @@ class PostController extends Controller
         // $like->post_id = $post->id;
         // $like->save();
 
+
         $like = Like::create([
             'user_id' => auth()->user()->id,
             'post_id' => $post->id,
         ]);
+        $message = $post->title . ' Liked Successfully!';
         // dd($like);
-        return redirect()->back();
+        // dd($post->toArray());
+        return redirect()->back()->with('success', $message);
     }
 
     public function unlike(Post $post)
@@ -114,9 +117,10 @@ class PostController extends Controller
 
         if ($like) {
             $like->delete();
+            $message = $post->title . ' Unliked Successfully!';
         }
 
-        return redirect()->back();
+        return redirect()->back()->with('success', $message);
     }
 
     public function save(Post $post)
@@ -130,8 +134,9 @@ class PostController extends Controller
             'user_id' => auth()->user()->id,
             'post_id' => $post->id,
         ]);
+        $message = $post->title . ' Saved Successfully!';
         // dd($like);
-        return redirect()->back();
+        return redirect()->back()->with('success', $message);
     }
 
     public function unsave(Post $post)
@@ -142,8 +147,9 @@ class PostController extends Controller
 
         if ($save) {
             $save->delete();
+            $message = $post->title . ' Unsaved Successfully!';
         }
 
-        return redirect()->back();
+        return redirect()->back()->with('success', $message);
     }
 }

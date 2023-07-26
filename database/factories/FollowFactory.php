@@ -18,13 +18,15 @@ class FollowFactory extends Factory
      */
     public function definition(): array
     {
-        $user = User::inRandomOrder()->first()->id;
-        $followerid = User::whereNotIn('id', [$user])->pluck('id')->random();
-        $followingid = User::whereNotIn('id', [$followerid])->pluck('id')->random();
+        // $user = User::inRandomOrder()->first()->id;
+        // $followerid = User::whereNotIn('id', [$user])->pluck('id')->random();
+        // $followingid = User::whereNotIn('id', [$followerid])->pluck('id')->random();
+        $followerId = User::inRandomOrder()->first()->id;
+        $followingId = User::whereNotIn('id', [$followerId])->pluck('id')->random();
 
         return [
-            'follower_id' => $followerid,
-            'following_id' => $followingid,
+            'follower_id' => $followerId,
+            'following_id' => $followingId,
         ];
     }
 }

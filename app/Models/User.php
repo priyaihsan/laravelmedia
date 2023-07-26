@@ -74,7 +74,7 @@ class User extends Authenticatable
     }
 
     // relasi 1 to M ke tabel follow
-    public function following(): HasMany
+    public function followings(): HasMany
     {
         return $this->hasMany(Follow::class, 'follower_id');
     }
