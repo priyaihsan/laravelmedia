@@ -14,8 +14,9 @@ class FollowController extends Controller
             'follower_id' => auth()->user()->id,
             'following_id' => $user->id,
         ]);
+        $message ='Followed ' . $user->name . ' Successfully!';
         // dd($follow);
-        return redirect()->back();
+        return redirect()->back()->with('success', $message);
     }
 
     public function unfollow(User $user)
@@ -26,7 +27,8 @@ class FollowController extends Controller
 
         if ($follow) {
             $follow->delete();
+            $message = 'Unfollowed ' . $user->name . ' Successfully!';
         }
-        return redirect()->back();
+        return redirect()->back()->with('success', $message);
     }
 }

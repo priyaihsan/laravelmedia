@@ -32,15 +32,18 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile-update', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile-delete', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // post
-    Route::get('/home', [PostController::class, 'home'])->name('home');
+    // post - message , notification
     Route::get('/message',[PostController::class, 'message'])->name('post.message');
     Route::get('/notification',[PostController::class, 'notification'])->name('post.notification');
-    Route::post('/post', [PostController::class, 'store'])->name('post.store');
-    Route::get('/post-create', [PostController::class, 'create'])->name('post.create');
-    Route::get('/post-edit/{post}', [PostController::class, 'edit'])->name('post.edit');
-    Route::patch('/post/{post}', [PostController::class, 'update'])->name('post.update');
-    Route::delete('/post/{post}', [PostController::class, 'destroy'])->name('post.destroy');
+
+
+    Route::resource('post', PostController::class);
+    // Route::get('/post', [PostController::class, 'index'])->name('post.index');
+    // Route::post('/post', [PostController::class, 'store'])->name('post.store');
+    // Route::get('/post-create', [PostController::class, 'create'])->name('post.create');
+    // Route::get('/post-edit/{post}', [PostController::class, 'edit'])->name('post.edit');
+    // Route::patch('/post/{post}', [PostController::class, 'update'])->name('post.update');
+    // Route::delete('/post/{post}', [PostController::class, 'destroy'])->name('post.destroy');
 
     // untuk menghitung post like dan unlike , save dan unsave
     Route::post('/post-like/{post}', [PostController::class, 'like'])->name('post.like');

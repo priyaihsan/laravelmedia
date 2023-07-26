@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Optional;
 
 class User extends Authenticatable
 {
@@ -82,6 +83,12 @@ class User extends Authenticatable
     public function followers(): HasMany
     {
         return $this->hasMany(Follow::class, 'following_id');
+    }
+
+    // untuk mengecheck apakah user sudah follow atau belum
+    public function getIsUserFollowerAttribute()
+    {
+        return $this->followers->contains('follower_id', auth()->user()->id);
     }
 
 }

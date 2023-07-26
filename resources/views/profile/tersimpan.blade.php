@@ -3,16 +3,14 @@
     </x-slot>
     <div class="px-12">
         @if (session('success'))
-        <p x-data="{ show: true }" x-show="show" x-transition
-            x-init="setTimeout(() => show = false, 5000)"
-            class="pb-3 text-sm text-green-600 dark:text-green-400">{{ session('success') }}
-        </p>
+            <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 5000)"
+                class="pb-3 text-sm text-green-600 dark:text-green-400">{{ session('success') }}
+            </p>
         @endif
         @if (session('danger'))
-        <p x-data="{ show: true }" x-show="show" x-transition
-            x-init="setTimeout(() => show = false, 5000)"
-            class="pb-3 text-sm text-red-600 dark:text-red-400">{{ session('danger') }}
-        </p>
+            <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 5000)"
+                class="pb-3 text-sm text-red-600 dark:text-red-400">{{ session('danger') }}
+            </p>
         @endif
     </div>
     <div class="static py-3 ">
@@ -86,7 +84,7 @@
                         </x-sub-link>
                     </div>
                     <div class="flex flex-wrap h-[500px] w-full overflow-x-auto">
-                        @foreach($saveds as $saved)
+                        @foreach ($saveds as $saved)
                             {{-- start card social media --}}
                             <div
                                 class="flex flex-col w-96 h-max mx-2 my-2 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
@@ -101,31 +99,45 @@
                                     class="absolute z-10 invisible inline-block w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800">
                                     <div
                                         class="px-3 py-2 bg-gray-100 border-b border-gray-200 rounded-t-lg dark:border-gray-600 dark:bg-gray-700">
-                                        <div class="flex items-center">
-                                            <img class="bg-cover rounded-full w-10 h-10"
-                                                src="{{ $saved->post->user->profile_picture }}" alt="">
-                                            <p
-                                                class="ms-2 text-base font-semibold leading-none text-gray-900 dark:text-white">
-                                                {{ $saved->post->user->name }}</p>
+                                        <div class="flex justify-between items-center">
+                                            <div class="flex items-center">
+                                                <img class="bg-cover rounded-full w-10 h-10"
+                                                    src="{{ $saved->post->user->profile_picture }}" alt="">
+                                                <p
+                                                    class="ms-2 text-base font-semibold leading-none text-gray-900 dark:text-white">
+                                                    {{ $saved->post->user->name }}</p>
+                                            </div>
+                                            <div>
+                                                {{-- buat agar bisa saling follow dan followed --}}
+                                                @if ($saved->post->user->is_user_follower)
+                                                    <form action="{{ route('user.unfollow', $saved->post->user) }}"
+                                                        method="post">
+                                                        @csrf
+                                                        @method('delete')
+                                                        <x-card-button.followed-button>
+                                                            Followed
+                                                        </x-card-button.followed-button>
+                                                    </form>
+                                                @else
+                                                    <form action="{{ route('user.follow', $saved->post->user) }}"
+                                                        method="post">
+                                                        @csrf
+                                                        <x-card-button.follow-button>
+                                                            Follow
+                                                        </x-card-button.follow-button>
+                                                    </form>
+                                                @endif
+                                            </div>
                                         </div>
                                         <div class="flex items-center justify-between mt-2">
                                             <p>
-                                                @if ($saved->post->user->followers_count == 0)
-                                                    <span class="font-semibold text-gray-900 dark:text-white">0</span>
-                                                @else
-                                                    <span
-                                                        class="font-semibold text-gray-900 dark:text-white">{{ $saved->post->user->followers_count }}</span>
-                                                @endif
+                                                <span
+                                                    class="font-semibold text-gray-900 dark:text-white">{{ $saved->post->user->followers_count }}</span>
                                                 follower
                                             </p>
                                             <p>
-                                                @if ($saved->post->user->followings_count == 0)
-                                                    <span class="font-semibold text-gray-900 dark:text-white">0</span>
-                                                @else
-                                                    <span
-                                                        class="font-semibold text-gray-900 dark:text-white">{{ $saved->post->user->followings_count }}</span>
-                                                @endif
-
+                                                <span
+                                                    class="font-semibold text-gray-900 dark:text-white">{{ $saved->post->user->followings_count }}</span>
                                                 following
                                             </p>
                                         </div>
