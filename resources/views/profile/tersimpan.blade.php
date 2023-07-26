@@ -108,24 +108,27 @@
                                                     {{ $saved->post->user->name }}</p>
                                             </div>
                                             <div>
-                                                {{-- buat agar bisa saling follow dan followed --}}
-                                                @if ($saved->post->user->is_user_follower)
-                                                    <form action="{{ route('user.unfollow', $saved->post->user) }}"
-                                                        method="post">
-                                                        @csrf
-                                                        @method('delete')
-                                                        <x-card-button.followed-button>
-                                                            Followed
-                                                        </x-card-button.followed-button>
-                                                    </form>
-                                                @else
-                                                    <form action="{{ route('user.follow', $saved->post->user) }}"
-                                                        method="post">
-                                                        @csrf
-                                                        <x-card-button.follow-button>
-                                                            Follow
-                                                        </x-card-button.follow-button>
-                                                    </form>
+                                                {{-- mengecheck ketika postingannya sendiri yang disimpan --}}
+                                                @if ($saved->post->user->id != auth()->user()->id)
+                                                    {{-- buat agar bisa saling follow dan followed --}}
+                                                    @if ($saved->post->user->is_user_follower)
+                                                        <form action="{{ route('user.unfollow', $saved->post->user) }}"
+                                                            method="post">
+                                                            @csrf
+                                                            @method('delete')
+                                                            <x-card-button.followed-button>
+                                                                Followed
+                                                            </x-card-button.followed-button>
+                                                        </form>
+                                                    @else
+                                                        <form action="{{ route('user.follow', $saved->post->user) }}"
+                                                            method="post">
+                                                            @csrf
+                                                            <x-card-button.follow-button>
+                                                                Follow
+                                                            </x-card-button.follow-button>
+                                                        </form>
+                                                    @endif
                                                 @endif
                                             </div>
                                         </div>
