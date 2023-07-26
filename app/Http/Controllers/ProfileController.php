@@ -31,23 +31,36 @@ class ProfileController extends Controller
 
     public function tersimpan(): View
     {
+
+        $user = User::with(['saveds' => function ($query) {
+            // Menggunakan with untuk mengambil data relasi 'category', dan 'type'
+            $query->with('user', 'post', 'post.type', 'post.likes', 'post.category');
+            $query->with(['post.user' => function ($query) {
+                // Menggunakan with untuk mengambil data relasi 'category', dan 'type'
+                $query->withCount('followers', 'following');
+            }]);
+        }])
+            ->withCount('followers', 'following', 'posts')
+            ->where('id', auth()->user()->id)
+            ->get();
+
         // $user = User::where('id', auth()->user()->id)
         //     ->withCount('followers', 'following', 'posts')
         //     ->get();
-        $user = auth()->user()->loadCount('followers', 'following', 'posts');
-        //        $user = auth()->user();
-        //        $saveds = auth()->user()->saveds()
-        $saveds = Saved::where('user_id', auth()->user()->id)
-            ->with('user', 'post', 'post.type', 'post.likes', 'post.category')
-            ->with(['post.user' => function ($query) {
-                // Menggunakan with untuk mengambil data relasi 'category', dan 'type'
-                $query->withCount('followers', 'following');
-            }])
-            ->get();
 
-        //         dd($profileUser);
+        // $user = auth()->user()->loadCount('followers', 'following', 'posts');
+
+        // $saveds = Saved::where('user_id', auth()->user()->id)
+        //     ->with('user', 'post', 'post.type', 'post.likes', 'post.category')
+        //     ->with(['post.user' => function ($query) {
+        //         // Menggunakan with untuk mengambil data relasi 'category', dan 'type'
+        //         $query->withCount('followers', 'following');
+        //     }])
+        //     ->get();
+
+        // dd($user->toArray());
         // dd($saveds->toArray());
-        return view('profile.tersimpan', compact('saveds', 'user'));
+        return view('profile.tersimpan', compact( 'user'));
     }
 
     /**

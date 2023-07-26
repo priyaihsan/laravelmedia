@@ -43,20 +43,41 @@ class PostController extends Controller
         return view('post.create', compact('categories', 'types'));
     }
 
-    public function edit()
+    public function edit(Post $post)
     {
-
+        $categories = Category::all();
+        $types = Type::all();
+        return view('post.edit', compact('post', 'categories', 'types'));
 
     }
 
-    public function update()
+    public function update(Request $request, Post $post)
     {
+        $request->validate([
+            'title' => 'required|max:255',
+            'content' => 'required',
+            'type_id' => 'required|nullable',
+            'category_id' => 'required|nullable',
+        ]);
 
+        $post->update([
+            'title' => ucfirst($request->title),
+            'content' => ucfirst($request->content),
+            'user_id' => auth()->user()->id,
+            'type_id' => $request->type_id,
+            'category_id' => $request->category_id,
+        ]);
+
+        return redirect()->route('profile.index');
     }
 
-    public function destroy()
+    public function destroy(Post $post)
     {
-
+        if (auth()->user()->id == $post->user_id) {
+            $post->delete();
+            // tinggal kasih event berhasil
+            return redirect()->route('profile.index');
+        }
     }
 
     public function message()
