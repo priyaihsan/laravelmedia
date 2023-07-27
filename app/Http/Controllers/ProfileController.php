@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Post;
 use App\Models\Saved;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -61,6 +62,17 @@ class ProfileController extends Controller
         // dd($user->toArray());
         // dd($saveds->toArray());
         return view('profile.tersimpan', compact('user', 'saveds'));
+    }
+
+    public function melihat(User $user)
+    {
+        $user = User::where('id', $user->id)
+            ->with('posts', 'posts.category', 'posts.type', 'posts.likes', 'posts.user', 'posts.saveds')
+            ->withCount('followers', 'followings', 'posts')
+            ->get();
+
+        // dd($user->toArray());
+        return view('profile.melihat', compact('user'));
     }
 
     /**

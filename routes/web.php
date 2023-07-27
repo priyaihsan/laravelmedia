@@ -28,6 +28,7 @@ Route::middleware('auth')->group(function () {
     // profile
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
     Route::get('/profile-tersimpan', [ProfileController::class, 'tersimpan'])->name('profile.tersimpan');
+    Route::get('/profile-melihat/{user}', [ProfileController::class, 'melihat'])->name('profile.melihat');
     Route::get('/profile-edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile-update', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile-delete', [ProfileController::class, 'destroy'])->name('profile.destroy');

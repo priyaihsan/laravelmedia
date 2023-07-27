@@ -4,16 +4,14 @@
 
     <div class="px-12">
         @if (session('success'))
-        <p x-data="{ show: true }" x-show="show" x-transition
-            x-init="setTimeout(() => show = false, 5000)"
-            class="pb-3 text-sm text-green-600 dark:text-green-400">{{ session('success') }}
-        </p>
+            <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 5000)"
+                class="pb-3 text-sm text-green-600 dark:text-green-400">{{ session('success') }}
+            </p>
         @endif
         @if (session('danger'))
-        <p x-data="{ show: true }" x-show="show" x-transition
-            x-init="setTimeout(() => show = false, 5000)"
-            class="pb-3 text-sm text-red-600 dark:text-red-400">{{ session('danger') }}
-        </p>
+            <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 5000)"
+                class="pb-3 text-sm text-red-600 dark:text-red-400">{{ session('danger') }}
+            </p>
         @endif
     </div>
     <div class="static py-3 ">
@@ -73,17 +71,8 @@
                 @endforeach
                 <div class="w-full mt-3 lg:mt-0 dark:bg-gray-600 lg:ms-2 p-5 rounded-lg">
                     <div class="">
-                        <x-sub-link :href="route('profile.index')" :active="request()->routeIs('profile.index')">
+                        <x-sub-link active>
                             {{ __('Post') }}
-                        </x-sub-link>
-                        <x-sub-link :href="route('profile.tersimpan')" :active="request()->routeIs('profile.tersimpan')">
-                            {{ __('Tersimpan') }}
-                        </x-sub-link>
-                        <x-sub-link :href="route('post.create')">
-                            {{ __('Create Post') }}
-                        </x-sub-link>
-                        <x-sub-link :href="route('profile.edit')">
-                            {{ __('Edit Profile') }}
                         </x-sub-link>
                     </div>
                     <div class="flex flex-wrap h-[500px] w-full overflow-x-auto">
@@ -92,34 +81,9 @@
                             <div
                                 class="flex flex-col justify-between w-96 h-max mx-2 my-2 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
                                 <div>
-                                    <button data-popover-target="popover-click-{{ $post->id }}"
-                                        data-popover-trigger="click" type="button"
-                                        class="my-2 text-2xl px-6 font-bold text-left tracking-tight text-gray-900 dark:text-white hover:underline hover:decoration-solid">
+                                    <p class="my-2 text-2xl px-6 font-bold text-left tracking-tight text-gray-900 dark:text-white hover:underline hover:decoration-solid">
                                         {{ $post->title }}
-                                    </button>
-
-                                </div>
-                                <div data-popover id="popover-click-{{ $post->id }}" role="tooltip"
-                                    class="absolute z-10 invisible inline-block w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800">
-                                    <div
-                                        class="px-3 py-2 bg-gray-100 border-b border-gray-200 rounded-t-lg dark:border-gray-600 dark:bg-gray-700">
-                                        <h3 class="font-semibold text-gray-900 dark:text-white">{{ $post->title }}
-                                        </h3>
-                                    </div>
-                                    <div class="flex items-center justify-between">
-                                        <a href="{{ route('post.edit', $post) }}"
-                                            class="p-3 rounded-lg dark:text-slate-500 hover:bg-gray-100 dark:hover:text-white dark:hover:bg-gray-800 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-800 transition duration-150 ease-in-out">Edit
-                                            Post</a>
-                                        <form action="{{ route('post.destroy', $post) }}" method="Post">
-                                            @csrf
-                                            @method('delete')
-                                            <button type="submit"
-                                                class="p-3 rounded-lg dark:text-red-50 hover:bg-gray-100 dark:hover:text-red-500 dark:hover:bg-gray-800 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-800 transition duration-150 ease-in-out">
-                                                Delete Post
-                                            </button>
-                                        </form>
-                                    </div>
-                                    <div data-popper-arrow></div>
+                                    </p>
                                 </div>
                                 <div>
                                     <div class="h-26 overflow-hidden">

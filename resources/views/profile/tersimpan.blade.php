@@ -98,39 +98,13 @@
                                 <div data-popover id="popover-click-{{ $saved->post->id }}" role="tooltip"
                                     class="absolute z-10 invisible inline-block w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800">
                                     <div
-                                        class="px-3 py-2 bg-gray-100 border-b border-gray-200 rounded-t-lg dark:border-gray-600 dark:bg-gray-700">
-                                        <div class="flex justify-between items-center">
-                                            <div class="flex items-center">
-                                                <img class="bg-cover rounded-full w-10 h-10"
-                                                    src="{{ $saved->post->user->profile_picture }}" alt="">
-                                                <p
-                                                    class="ms-2 text-base font-semibold leading-none text-gray-900 dark:text-white">
-                                                    {{ $saved->post->user->name }}</p>
-                                            </div>
-                                            <div>
-                                                {{-- mengecheck ketika postingannya sendiri yang disimpan --}}
-                                                @if ($saved->post->user->id != auth()->user()->id)
-                                                    {{-- buat agar bisa saling follow dan followed --}}
-                                                    @if ($saved->post->user->is_user_follower)
-                                                        <form action="{{ route('user.unfollow', $saved->post->user) }}"
-                                                            method="post">
-                                                            @csrf
-                                                            @method('delete')
-                                                            <x-card-button.followed-button>
-                                                                Followed
-                                                            </x-card-button.followed-button>
-                                                        </form>
-                                                    @else
-                                                        <form action="{{ route('user.follow', $saved->post->user) }}"
-                                                            method="post">
-                                                            @csrf
-                                                            <x-card-button.follow-button>
-                                                                Follow
-                                                            </x-card-button.follow-button>
-                                                        </form>
-                                                    @endif
-                                                @endif
-                                            </div>
+                                        class="px-3 py-2 bg-gray-100 border-b border-gray-200 rounded-lg dark:border-gray-600 dark:bg-gray-700">
+                                        <div class="flex items-center">
+                                            <img class="bg-cover rounded-full w-10 h-10"
+                                                src="{{ $saved->post->user->profile_picture }}" alt="">
+                                            <p
+                                                class="ms-2 text-base font-semibold leading-none text-gray-900 dark:text-white">
+                                                {{ $saved->post->user->name }}</p>
                                         </div>
                                         <div class="flex items-center justify-between mt-2">
                                             <p>
@@ -145,10 +119,36 @@
                                             </p>
                                         </div>
                                     </div>
-                                    <div class="flex items-center justify-between">
-                                        <a href="{{ route('post.edit', $saved->post) }}"
-                                            class="p-3 dark:text-slate-500 hover:bg-gray-100 dark:hover:text-white dark:hover:bg-gray-800 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-800 transition duration-150 ease-in-out">Lihat
-                                            Profile</a>
+                                    <div class="flex justify-between items-center">
+                                        {{-- mengecheck ketika postingannya sendiri yang disimpan --}}
+                                        @if ($saved->post->user->id != auth()->user()->id)
+                                            <div class="flex items-center justify-between">
+                                                <a href="{{ route('profile.melihat', $saved->post->user) }}"
+                                                    class="p-3 rounded-lg dark:text-slate-500 hover:bg-gray-100 dark:hover:text-white dark:hover:bg-gray-800 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-800 transition duration-150 ease-in-out">Lihat
+                                                    Profile</a>
+                                            </div>
+                                            <div class="p-3">
+                                                {{-- buat agar bisa saling follow dan followed --}}
+                                                @if ($saved->post->user->is_user_follower)
+                                                    <form action="{{ route('user.unfollow', $saved->post->user) }}"
+                                                        method="post">
+                                                        @csrf
+                                                        @method('delete')
+                                                        <x-card-button.followed-button>
+                                                            Followed
+                                                        </x-card-button.followed-button>
+                                                    </form>
+                                                @else
+                                                    <form action="{{ route('user.follow', $saved->post->user) }}"
+                                                        method="post">
+                                                        @csrf
+                                                        <x-card-button.follow-button>
+                                                            Follow
+                                                        </x-card-button.follow-button>
+                                                    </form>
+                                                @endif
+                                            </div>
+                                        @endif
                                     </div>
                                     <div data-popper-arrow></div>
                                 </div>
