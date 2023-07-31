@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\Post;
+use App\Models\Role;
+use App\Models\RoleUser;
 use App\Models\Saved;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -11,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use Carbon\Carbon;
 
 class ProfileController extends Controller
 {
@@ -80,9 +83,18 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
+        // return view('profile.edit', [
+        //     'user' => $request->user(),
+        // ]);
+        $user = User::where('id', $request->user()->id)
+            ->with('roles')
+            ->first();
+
+        $roles = Role::all();
+
+        // dd($user->toArray());
+        // dd($roleUser->toArray());
+        return view('profile.edit', compact('user', 'roles',));
     }
 
     /**
@@ -90,13 +102,51 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
 
+        // $request->user()->fill($request->validated());
+
+        // if ($request->user()->isDirty('email')) {
+        //     $request->user()->email_verified_at = null;
+        // }
+
+        // $selectedRoles = $request->input('roles', []);
+        // $user->roles()->sync($selectedRoles);
+
+
+        $user = $request->user();
+
+        // Update user attributes with validated data
+        $user->fill($request->validated());
+
+        // Clear email_verified_at if email is changed
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
         }
 
-        $request->user()->save();
+        // Save the user changes
+        $user->save();
+
+        // Update user roles
+        $roleIds = $request->input('roles', []);
+
+        // Loop melalui setiap ID peran yang ada dalam koleksi pengguna
+        foreach ($user->roles as $role) {
+            // Jika peran tidak ada dalam $roleIds, hapus peran tersebut
+            if (!in_array($role->id, $roleIds)) {
+                $user->roles()->detach($role->id);
+            }
+        }
+
+        // Loop melalui setiap ID peran dalam $roleIds
+        foreach ($roleIds as $roleId) {
+            // Cek apakah relasi sudah ada, jika belum tambahkan data baru
+            if (!$user->roles->pluck('id')->contains($roleId)) {
+                $user->roles()->attach($roleId, ['created_at' => Carbon::now(), 'updated_at' => Carbon::now()]);
+            }
+        }
+        // dd($selectedRoles);
+        // dd($request->toArray());
+        // $request->user()->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }

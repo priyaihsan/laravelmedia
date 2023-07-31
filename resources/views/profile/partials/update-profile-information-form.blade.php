@@ -16,7 +16,6 @@
     <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
         @csrf
         @method('patch')
-
         <div>
             <x-input-label for="name" :value="__('Name')" />
             <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)"
@@ -58,8 +57,23 @@
             <x-input-error class="mt-2" :messages="$errors->get('bio')" />
         </div>
 
+        <div>
+            <p class="block font-medium text-sm text-gray-700 dark:text-gray-300 mb-3">Role</p>
+            @foreach ($roles as $role)
+                <div class="flex items-center mb-4">
+                    <input {{ $user->roles->contains($role->id) ? 'checked' : '' }} id="role_{{ $role->id }}"
+                        name="roles[]" type="checkbox" value="{{ $role->id }}"
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="role_{{ $role->id }}"
+                        class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ $role->name }}</label>
+                </div>
+            @endforeach
+
+        </div>
+
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
+            <x-cancel-button href="{{ route('profile.index') }}" />
 
             @if (session('status') === 'profile-updated')
                 <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)"
