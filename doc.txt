@@ -1,1 +1,17 @@
 - membuat semua halaman profile
+
+
+- membuat tabel order item , order
+
+php artisan make:model OrderDetail -mfsc
+php artisan make:model Order -mfsc
+php artisan make:model Commision -mfsc
+php artisan make:model Payment -mfsc
+
+pase pembayaran :
+
+- pending
+- payment
+- checking
+- uncomplete
+- complete

@@ -90,76 +90,60 @@
                 @endforeach
                 <div class="w-full mt-3 lg:mt-0 dark:bg-gray-600 lg:ms-2 p-5 rounded-lg">
                     <div class="flex flex-wrap gap-2">
-                        <x-sub-link :href="route('profile.layanan',auth()->user()->name)" :active="request()->routeIs('profile.layanan')">
+                        <x-sub-link :href="route('profile.layanan', auth()->user()->name)" :active="request()->routeIs('profile.layanan')">
                             {{ __('Layanan') }}
                         </x-sub-link>
-                        <x-sub-link :href="route('profile.index',auth()->user()->name)" :active="request()->routeIs('profile.index')">
+                        <x-sub-link :href="route('profile.index', auth()->user()->name)" :active="request()->routeIs('profile.index')">
                             {{ __('Dibuat') }}
                         </x-sub-link>
-                        <x-sub-link :href="route('profile.tersimpan',auth()->user()->name)" :active="request()->routeIs('profile.tersimpan')">
+                        <x-sub-link :href="route('profile.tersimpan', auth()->user()->name)" :active="request()->routeIs('profile.tersimpan')">
                             {{ __('Disimpan') }}
                         </x-sub-link>
                         <x-sub-link :href="route('profile.checkout')" :active="request()->routeIs('profile.checkout')">
                             {{ __('Checkout') }}
                         </x-sub-link>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 h-[500px] w-full overflow-x-auto">
-                        @foreach ($saveds as $saved)
-                            <div
-                                class="h-fit bg-white border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                                <img class="rounded-t-lg h-[200px] w-full object-cover object-top"
-                                    src="{{ asset('storage/' . $saved->post->content_url) }}" alt="" />
-                                <div class="px-3 py-2">
-                                    <h5 class=" text-base font-bold tracking-tight text-gray-900 dark:text-white">
-                                        {{ $saved->post->title }}</h5>
-
-                                    <div class="flex items-center justify-between mb-2 mt-3">
-                                        <p class="mb-4 text-sm text-gray-700 dark:text-gray-400">
-                                            {{ $saved->post->category->name }} ,
-                                            {{ $saved->post->type->name }}
-                                        </p>
-                                        <div class="flex items-center">
-                                            {{-- start form likes --}}
-                                            @if ($saved->post->is_likes)
-                                                {{-- menyukai --}}
-                                                <form action="{{ route('post.unlike', $saved->post) }}" method="POST">
-                                                    @csrf
-                                                    @method('delete')
-                                                    <x-card-button.like-button>
-                                                        @if ($saved->post->likes_count > 0)
-                                                            {{ $saved->post->likes_count }}
-                                                        @else
-                                                            0
-                                                        @endif
-                                                    </x-card-button.like-button>
-                                                </form>
-                                            @else
-                                                <form action="{{ route('post.like', $saved->post) }}" method="POST">
-                                                    @csrf
-                                                    @method('POST')
-                                                    {{-- tidak menyukai --}}
-                                                    <x-card-button.unlike-button>
-                                                        @if ($saved->post->likes_count > 0)
-                                                            {{ $saved->post->likes_count }}
-                                                        @else
-                                                            0
-                                                        @endif
-                                                    </x-card-button.unlike-button>
-                                                </form>
-                                            @endif
-                                            {{-- end form likes --}}
-                                            {{-- start form saveds --}}
-                                            {{-- tersimpan --}}
-                                            <form action="{{ route('post.unsave', $saved->post) }}" method="POST">
-                                                @csrf
-                                                @method('delete')
-                                                <x-card-button.saved-button>
-                                                </x-card-button.saved-button>
-                                            </form>
-                                            {{-- end form saveds --}}
-                                        </div>
-
+                    <div class="h-[500px] w-full overflow-x-auto">
+                        @foreach ($orders as $order)
+                            <div class="p-3 dark:bg-gray-500 w-full rounded-lg my-2">
+                                <div class="flex justify-between">
+                                    <div class="flex items-center gap-3">
+                                        <h5><span>Artist : </span>{{ $order->artist->name }}</h5>
+                                        <span
+                                            class="bg-red-100 text-red-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">{{ $order->status }}</span>
                                     </div>
+                                    <h5 class="font-semibold text-xl">Total: <span>Rp. </span>{{ $order->total_price }}
+                                    </h5>
+                                </div>
+                                <p class="text-lg font-medium mt-5">List Pesanan</p>
+                                <table class="w-full">
+                                    @foreach ($orderDetails as $orderDetail)
+                                        @if ($orderDetail->order_id == $order->id)
+                                            <tr class="border-b border-gray-400">
+                                                <th class="px-2 py-1 text-left">{{ $orderDetail->commision->title }}
+                                                </th>
+                                                <td class="px-2 py-1">{{ $orderDetail->quantity }}</td>
+                                                <td class="px-2 py-1">.</td>
+                                                <td class="px-2 py-1"><span>Rp.
+                                                    </span>{{ $orderDetail->commision->price }}</td>
+                                                <td class="px-2 py-1 text-right"><span>Rp.
+                                                    </span>{{ $orderDetail->price_per_item }}</td>
+                                            </tr>
+                                        @endif
+                                    @endforeach
+                                </table>
+                                <div class="px-6 py-4 flex justify-between text-center">
+                                    <p class="text-sm text-gray-700 dark:text-gray-300">Ordered
+                                        {{ $order->updated_at->format('M d,Y') }}</p>
+                                    @if ($order->status == 'checking')
+                                        <p>tunggu konfirmasi dari artist</p>
+                                    @else
+                                        <a type="submit" href="{{ route('payment.index', $order->id) }}"
+                                            class="px-4 py-2 text-sm text-white bg-green-500 rounded-md hover:bg-green-600 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+                                            Kirim Bukti Pembayaran
+                                        </a>
+                                    @endif
+
                                 </div>
                             </div>
                         @endforeach

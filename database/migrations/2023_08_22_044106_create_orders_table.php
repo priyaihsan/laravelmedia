@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('posts', function (Blueprint $table) {
+        Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('content_url', 2048)->nullable();
-            $table->foreignId('user_id')->cascadeOnDelete();
-            $table->foreignId('type_id')->cascadeOnDelete();
-            $table->foreignId('category_id')->cascadeOnDelete();
+            $table->foreignId('customer_id')->cascadeOnDelete();
+            $table->foreignId('artist_id')->cascadeOnDelete();
+            $table->decimal('total_price', 8, 2)->nullable();
+            $table->string('status')->default('pending');
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('posts');
+        Schema::dropIfExists('orders');
     }
 };

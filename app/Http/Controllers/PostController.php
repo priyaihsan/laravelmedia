@@ -13,27 +13,43 @@ class PostController extends Controller
 {
     public function index()
     {
-        return view('post.home');
+        $posts = Post::with('category', 'type', 'likes','saveds')
+        ->with('user', function ($query) {
+            $query->withCount('followers', 'followings');
+        })
+        ->get();
+        // dd($posts->toArray());
+        return view('post.home', compact('posts'));
     }
 
     public function store(Request $request, Post $post)
     {
         $request->validate([
             'title' => 'required|max:255',
-            'content' => 'required',
             'type_id' => 'required|nullable',
             'category_id' => 'required|nullable',
+            'content_url' => 'required|nullable|file',
         ]);
+
+        // dd($request->toArray());
+
+        // Mengunggah dan menyimpan file di folder simbolik
+        if ($request->hasFile('content_url')) {
+            $file = $request->file('content_url');
+            $path = $file->store('post-images'); // Ganti 'folder-simbolik' sesuai dengan folder yang Anda inginkan
+        } else {
+            $path = null;
+        }
 
         $post = Post::create([
             'title' => ucfirst($request->title),
-            'content' => ucfirst($request->content),
             'user_id' => auth()->user()->id,
             'type_id' => $request->type_id,
             'category_id' => $request->category_id,
+            'content_url' => $path,
         ]);
 
-        return redirect()->route('profile.index')->with('success', 'Post created successfully!');;
+        return redirect()->route('profile.index',auth()->user()->name)->with('success', 'Post created successfully!');
     }
 
     public function create()
@@ -48,27 +64,24 @@ class PostController extends Controller
         $categories = Category::all();
         $types = Type::all();
         return view('post.edit', compact('post', 'categories', 'types'));
-
     }
 
     public function update(Request $request, Post $post)
     {
         $request->validate([
             'title' => 'required|max:255',
-            'content' => 'required',
             'type_id' => 'required|nullable',
             'category_id' => 'required|nullable',
         ]);
 
         $post->update([
             'title' => ucfirst($request->title),
-            'content' => ucfirst($request->content),
             'user_id' => auth()->user()->id,
             'type_id' => $request->type_id,
             'category_id' => $request->category_id,
         ]);
 
-        return redirect()->route('profile.index')->with('success', 'Post updated successfully!');;
+        return redirect()->route('profile.index')->with('success', 'Post updated successfully!');
     }
 
     public function destroy(Post $post)

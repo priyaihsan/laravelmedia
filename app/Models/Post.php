@@ -13,10 +13,10 @@ class Post extends Model
 
     protected $fillable = [
         'title',
-        'content',
         'user_id',
         'category_id',
         'type_id',
+        'content_url',
     ];
 
     public function type(): BelongsTo

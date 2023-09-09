@@ -1,8 +1,13 @@
 <?php
 
+use App\Http\Controllers\CommisionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\FollowController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\OrderDetailController;
+use App\Models\Order;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,16 +31,48 @@ Route::get('/dashboard', function () {
 
 Route::middleware('auth')->group(function () {
     // profile
-    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
-    Route::get('/profile-tersimpan', [ProfileController::class, 'tersimpan'])->name('profile.tersimpan');
-    Route::get('/profile-melihat/{user}', [ProfileController::class, 'melihat'])->name('profile.melihat');
+    Route::get('/{name}/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::get('/{name}/layanan', [ProfileController::class, 'layanan'])->name('profile.layanan');
+    Route::get('/{name}/tersimpan', [ProfileController::class, 'tersimpan'])->name('profile.tersimpan');
     Route::get('/profile-edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile-update', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile-delete', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    //checkout
+    Route::get('/checkout',[ProfileController::class,'checkout'])->name('profile.checkout');
+
+
+    //commision
+    Route::resource('commision', CommisionController::class);
+    // Route::get('/commision-create', [CommisionController::class, 'create'])->name('commision.create');
+    // Route::get('/commision-edit/{commision}', [CommisionController::class, 'edit'])->name('commision.edit');
+    // Route::patch('/commision/{commision}', [CommisionController::class, 'update'])->name('commision.update');
+    // Route::delete('/commision/{commision}', [CommisionController::class, 'destroy'])->name('commision.destroy');
+    // Route::post('/commision', [CommisionController::class, 'store'])->name('commision.store');
+
+    // order detail
+    Route::post('/{id}/addToCard', [OrderDetailController::class, 'addToCard'])->name('orderDetail.addToCard');
+
+    // order
+    Route::get('/{name}/order', [OrderController::class, 'index'])->name('order.index');
+    Route::patch('{name}/checkout',[OrderController::class , 'orderCheckout'])->name('order.checkout');
+    // increment and decrement quantity
+    Route::patch('/{id}/increment', [OrderDetailController::class, 'increment'])->name('orderDetail.increment');
+    Route::patch('/{id}/decrement', [OrderDetailController::class, 'decrement'])->name('orderDetail.decrement');
+
+    // delete order detail
+    Route::delete('/{id}/delete', [OrderDetailController::class, 'destroy'])->name('orderDetail.destroy');
+
+    // order payment
+    Route::get('/order-payment', [OrderController::class, 'orderPayment'])->name('order.orderPayment');
+
     // post - message , notification
     Route::get('/message',[PostController::class, 'message'])->name('post.message');
     Route::get('/notification',[PostController::class, 'notification'])->name('post.notification');
+
+    // payment
+    Route::get('/{id}/payment', [PaymentController::class, 'index'])->name('payment.index');
+    Route::post('/{id}/payment-store', [PaymentController::class, 'store'])->name('payment.store');
 
 
     Route::resource('post', PostController::class);

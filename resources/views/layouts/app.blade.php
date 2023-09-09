@@ -23,8 +23,7 @@
 
         <!-- Page Heading -->
         @if (isset($header))
-            <header class="w-full py-28 px-4 sm:px-6 lg:px-8 bg-cover bg-center shadow"
-                style="background-image: url(./img/wallpaperflare.com_wallpaper.jpg">
+            <header class="w-full sm:px-6 lg:px-8 bg-cover bg-center shadow">
             </header>
         @endif
         <!-- Page Content -->

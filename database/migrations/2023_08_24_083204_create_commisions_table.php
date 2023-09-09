@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('posts', function (Blueprint $table) {
+        Schema::create('commisions', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('content_url', 2048)->nullable();
+            $table->string('description');
             $table->foreignId('user_id')->cascadeOnDelete();
-            $table->foreignId('type_id')->cascadeOnDelete();
-            $table->foreignId('category_id')->cascadeOnDelete();
+            $table->boolean('status')->default(1);
+            $table->decimal('price', 8, 2);
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('posts');
+        Schema::dropIfExists('commisions');
     }
 };

@@ -85,6 +85,22 @@ class User extends Authenticatable
         return $this->hasMany(Follow::class, 'following_id');
     }
 
+    public function customers()
+    {
+        return $this->hasMany(Order::class,'customer_id');
+    }
+
+    public function artists()
+    {
+        return $this->hasMany(Order::class,'artist_id');
+    }
+
+    // relasi 1 to M ke tabel commision
+    public function commisions(): HasMany
+    {
+        return $this->hasMany(Commision::class);
+    }
+
     // untuk mengecheck apakah user sudah follow atau belum
     public function getIsUserFollowerAttribute()
     {

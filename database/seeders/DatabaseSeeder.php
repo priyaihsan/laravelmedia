@@ -16,11 +16,11 @@ class DatabaseSeeder extends Seeder
         $this->call(FollowSeeder::class);
         $this->call(RoleSeeder::class);
         $this->call(RoleUserSeeder::class);
+        $this->call(FollowSeeder::class);
         $this->call(CategorySeeder::class);
         $this->call(TypeSeeder::class);
-        $this->call(PostSeeder::class);
-        $this->call(FollowSeeder::class);
-        $this->call(LikeSeeder::class);
-        $this->call(SavedSeeder::class);
+        // $this->call(PostSeeder::class);
+        // $this->call(LikeSeeder::class);
+        // $this->call(SavedSeeder::class);
     }
 }

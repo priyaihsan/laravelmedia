@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Commision;
+use App\Models\Order;
+use App\Models\OrderDetail;
+use App\Models\OrderItem;
 use App\Models\Post;
 use App\Models\Role;
 use App\Models\RoleUser;
@@ -17,7 +21,7 @@ use Carbon\Carbon;
 
 class ProfileController extends Controller
 {
-    public function index(): View
+    public function index($name): View
     {
         // $user = User::with(['posts' => function ($query) {
         //     // Menggunakan with untuk mengambil data relasi 'category', dan 'type'
@@ -25,36 +29,53 @@ class ProfileController extends Controller
         // }])
         //     ->where('id', auth()->user()->id)
         //     ->get();
-        $user = User::where('id', auth()->user()->id)
+        $user = User::where('name', $name)
             ->with('posts', 'posts.category', 'posts.type', 'posts.likes', 'posts.user', 'posts.saveds')
             ->withCount('followers', 'followings', 'posts')
             ->get();
         // dd($user->toArray());
-        return view('profile.index', compact('user'));
+        return view('profile.index', compact('user', 'name'));
     }
 
-    public function tersimpan(): View
+    public function layanan($name): View
     {
-
-        // $user = User::with(['saveds' => function ($query) {
-        //     // Menggunakan with untuk mengambil data relasi 'category', dan 'type'
-        //     $query->with('user', 'post', 'post.type', 'post.likes', 'post.category');
-        //     $query->with(['post.user' => function ($query) {
-        //         // Menggunakan with untuk mengambil data relasi 'category', dan 'type'
-        //         $query->withCount('followers', 'following');
-        //     }]);
-        // }])
-        //     ->withCount('followers', 'following', 'posts')
-        //     ->where('id', auth()->user()->id)
-        //     ->get();
-
-        $user = User::where('id', auth()->user()->id)
+        $user = User::where('name', $name)
+            ->with('posts', 'posts.category', 'posts.type', 'posts.likes', 'posts.user', 'posts.saveds')
             ->withCount('followers', 'followings', 'posts')
             ->get();
 
-        // $user = auth()->user()->loadCount('followers', 'following', 'posts');
+        $commisions = Commision::whereHas('user', function ($query) use ($name) {
+            $query->where('name', $name);
+        })
+            ->get();
 
-        $saveds = Saved::where('user_id', auth()->user()->id)
+        $orderDetails = OrderDetail::with('commision','order')
+            ->with('commision.user', function ($query) use ($name) {
+                $query->where('name', $name);
+            })
+            ->whereHas('order',function ($query){
+                $query->where('status','done');
+            })
+            ->get();
+
+        // $commisions = Commision::with('orderDetails')->get();
+
+
+        // dd($orderDetails->toArray());
+        // dd($commisions->toArray());
+
+        return view('profile.layanan', compact('user', 'commisions','orderDetails', 'name'));
+    }
+
+    public function tersimpan($name): View
+    {
+        $user = User::where('name', $name)
+            ->withCount('followers', 'followings', 'posts')
+            ->get();
+
+        $userId = User::where('name', $name)->first();
+
+        $saveds = Saved::where('user_id', $userId->id)
             ->with('user', 'post', 'post.type', 'post.likes', 'post.category')
             ->with(['post.user' => function ($query) {
                 // Menggunakan with untuk mengambil data relasi 'category', dan 'type'
@@ -67,20 +88,29 @@ class ProfileController extends Controller
         return view('profile.tersimpan', compact('user', 'saveds'));
     }
 
-    public function melihat(User $user)
+    public function checkout()
     {
-        $user = User::where('id', $user->id)
-            ->with('posts', 'posts.category', 'posts.type', 'posts.likes', 'posts.user', 'posts.saveds')
-            ->withCount('followers', 'followings', 'posts')
-            ->get();
+        $user = User::where('id', auth()->user()->id)
+        ->withCount('followers', 'followings', 'posts')
+        ->get();
 
-        // dd($user->toArray());
-        return view('profile.melihat', compact('user'));
+
+        $orders = Order::with('artist')
+        ->where('customer_id', auth()->user()->id)
+        ->get();
+
+        $orderDetails = OrderDetail::with( 'commision')
+        ->with('order', function ($query) {
+            $query->where('customer_id', auth()->user()->id);
+        })
+        ->get();
+
+        // dd($orderDetails->toArray());
+        // dd($orders->toArray());
+
+        return view('profile.checkout', compact( 'user','orders','orderDetails'));
     }
 
-    /**
-     * Display the user's profile form.
-     */
     public function edit(Request $request): View
     {
         // return view('profile.edit', [
