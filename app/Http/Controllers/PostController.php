@@ -81,7 +81,7 @@ class PostController extends Controller
             'category_id' => $request->category_id,
         ]);
 
-        return redirect()->route('profile.index')->with('success', 'Post updated successfully!');
+        return redirect()->route('profile.index',auth()->user()->name)->with('success', 'Post updated successfully!');
     }
 
     public function destroy(Post $post)
@@ -89,7 +89,7 @@ class PostController extends Controller
         if (auth()->user()->id == $post->user_id) {
             $post->delete();
             // tinggal kasih event berhasil
-            return redirect()->route('profile.index')->with('success', 'Post deleted successfully!');
+            return redirect()->route('profile.index',auth()->user()->name)->with('success', 'Post deleted successfully!');
         }
     }
 

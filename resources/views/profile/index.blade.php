@@ -138,8 +138,28 @@
                                 <img class="rounded-t-lg h-[200px] w-full object-cover object-top"
                                     src="{{ asset('storage/' . $post->content_url) }}" alt="" />
                                 <div class="px-3 py-2">
-                                    <h5 class=" text-base font-bold tracking-tight text-gray-900 dark:text-white">
-                                        {{ $post->title }}</h5>
+                                    <button data-popover-target="popover-click-{{ $post->id }}"
+                                        data-popover-trigger="click" type="button" class="text-left w-full">
+                                        <h5 class=" text-base font-bold tracking-tight text-gray-900 dark:text-white hover:underline">
+                                            {{ $post->title }}</h5>
+                                    </button>
+                                    <div data-popover id="popover-click-{{ $post->id }}" role="tooltip"
+                                        class="absolute z-10 invisible inline-block w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800">
+                                        <div class="flex items-center justify-between">
+                                            <a href="{{ route('post.edit', $post) }}"
+                                                class="p-3 rounded-lg dark:text-slate-500 hover:bg-gray-100 dark:hover:text-white dark:hover:bg-gray-800 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-800 transition duration-150 ease-in-out">Edit
+                                                Post</a>
+                                            <form action="{{ route('post.destroy', $post) }}" method="Post">
+                                                @csrf
+                                                @method('delete')
+                                                <button type="submit"
+                                                    class="p-3 rounded-lg dark:text-red-50 hover:bg-gray-100 dark:hover:text-red-500 dark:hover:bg-gray-800 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-800 transition duration-150 ease-in-out">
+                                                    Delete Post
+                                                </button>
+                                            </form>
+                                        </div>
+                                        <div data-popper-arrow></div>
+                                    </div>
                                     <p class="mb-4 text-sm text-gray-700 dark:text-gray-400">
                                         {{ $post->category->name }} , {{ $post->type->name }}</p>
                                     <div class="flex items-center justify-between mb-2">
